@@ -4,11 +4,9 @@ MAINTAINER Yohei Yamane <yohei.yamane@fujixerox.co.jp>
 ENV MEDIAWIKI_VERSION 1.26
 ENV MEDIAWIKI_FULL_VERSION 1.26.2
 
-#ENV http_proxy http://proxy.fujixerox.co.jp:8080
-#ENV https_proxy http://proxy.fujixerox.co.jp:8080
-ENV http_proxy http_proxy http://proxy.fujixerox.co.jp:8080
-ENV https_proxy http_proxy http://proxy.fujixerox.co.jp:8080
-ENV ALL_PROXY http_proxy http://proxy.fujixerox.co.jp:8080
+ENV http_proxy $HTTP_PROXY
+ENV https_proxy $HTTP_PROXY
+ENV ALL_PROXY $HTTP_PROXY
 
 RUN set -x; \
     apt-get update \
@@ -16,7 +14,7 @@ RUN set -x; \
         g++ \
         libicu52 \
         libicu-dev \
-    && pear config-set http_proxy http://proxy.fujixerox.co.jp:8080 \
+    && pear config-set http_proxy $HTTP_PROXY \
     && pecl install intl \
     && echo extension=intl.so >> /usr/local/etc/php/conf.d/ext-intl.ini \
     && apt-get purge -y --auto-remove g++ libicu-dev \
