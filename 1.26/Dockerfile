@@ -4,8 +4,11 @@ MAINTAINER Yohei Yamane <yohei.yamane@fujixerox.co.jp>
 ENV MEDIAWIKI_VERSION 1.26
 ENV MEDIAWIKI_FULL_VERSION 1.26.2
 
-ENV http_proxy http://proxy.fujixerox.co.jp:8080
-ENV https_proxy http://proxy.fujixerox.co.jp:8080
+#ENV http_proxy http://proxy.fujixerox.co.jp:8080
+#ENV https_proxy http://proxy.fujixerox.co.jp:8080
+ENV http_proxy http_proxy http://proxy.fujixerox.co.jp:8080
+ENV https_proxy http_proxy http://proxy.fujixerox.co.jp:8080
+ENV ALL_PROXY http_proxy http://proxy.fujixerox.co.jp:8080
 
 RUN set -x; \
     apt-get update \
@@ -42,8 +45,8 @@ RUN gpg --keyserver pool.sks-keyservers.net --recv-keys \
 RUN MEDIAWIKI_DOWNLOAD_URL="https://releases.wikimedia.org/mediawiki/$MEDIAWIKI_VERSION/mediawiki-$MEDIAWIKI_FULL_VERSION.tar.gz"; \
     set -x; \
     mkdir -p /usr/src/mediawiki \
-    && curl -x http://proxy.fujixerox.co.jp:8080  -fSL "$MEDIAWIKI_DOWNLOAD_URL" -o mediawiki.tar.gz \
-    && curl -x http://proxy.fujixerox.co.jp:8080  -fSL "${MEDIAWIKI_DOWNLOAD_URL}.sig" -o mediawiki.tar.gz.sig \
+    && curl -fSL "$MEDIAWIKI_DOWNLOAD_URL" -o mediawiki.tar.gz \
+    && curl -fSL "${MEDIAWIKI_DOWNLOAD_URL}.sig" -o mediawiki.tar.gz.sig \
     && gpg --verify mediawiki.tar.gz.sig \
     && tar -xf mediawiki.tar.gz -C /usr/src/mediawiki --strip-components=1
 
